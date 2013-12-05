@@ -9,6 +9,7 @@ import org.jsoup.select.Elements;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,7 @@ public class SitesFragment extends Fragment implements OnClickListener {
 	public void onClick(View arg0) {
 		WebView wvEntry;
 		String sContent;
+		Util util = new Util(getActivity());
 		/*Resources r = getActivity().getResources();
 		LayoutParams params = new LayoutParams(
 		        LayoutParams.WRAP_CONTENT,      
@@ -49,16 +51,15 @@ public class SitesFragment extends Fragment implements OnClickListener {
 		        200, 
 		        r.getDisplayMetrics()));*/
 		try {
-			Document doc = Jsoup.connect("http://www.arma3.com/news").get();
-			Elements content = doc.getElementsByClass("news_article");
-			
-			for (int i = 0; i < content.size(); i++) {
-				content.get(i).select("[src]").remove();
-				sContent = content.get(i).html();
+			Elements elements = util.getByClass("http://www.arma3.com/news", "news_article");
+			elements = util.removeMedia(elements);
+			for (int i = 0; i < elements.size(); i++) {
+				sContent = elements.get(i).html();
 				wvEntry = new WebView(getActivity());
 				//wvEntry.setLayoutParams(params);
 				wvEntry.loadDataWithBaseURL(null, sContent, "text/html", "utf-8", null);
 				llContent.addView(wvEntry);
+				Log.e("FFF", elements.get(i).select("header").text());
 			}
 		} catch (IOException e) {
 			Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
