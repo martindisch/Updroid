@@ -93,6 +93,20 @@ public class MainActivity extends FragmentActivity implements
 		// When the given tab is selected, switch to the corresponding page in
 		// the ViewPager.
 		mViewPager.setCurrentItem(tab.getPosition());
+		
+		final ActionBar actionBar = getActionBar();
+		
+		if (tab.getPosition() == 1) {
+			SitesFragment fragment = (SitesFragment) findFragmentByPosition(1);
+			fragment.showSelection();
+		}
+	}
+	
+	public Fragment findFragmentByPosition(int position) {
+	    SectionsPagerAdapter fragmentPagerAdapter = mSectionsPagerAdapter;
+	    return getSupportFragmentManager().findFragmentByTag(
+	            "android:switcher:" + mViewPager.getId() + ":"
+	                    + fragmentPagerAdapter.getItemId(position));
 	}
 
 	@Override
@@ -117,9 +131,7 @@ public class MainActivity extends FragmentActivity implements
 
 		@Override
 		public Fragment getItem(int position) {
-			// getItem is called to instantiate the fragment for the given page.
-			// Return a DummySectionFragment (defined as a static inner class
-			// below) with the page number as its lone argument.
+
 			Fragment fragment = null;
 			/*
 			 * Bundle args = new Bundle();
@@ -129,9 +141,11 @@ public class MainActivity extends FragmentActivity implements
 			switch (position) {
 			case 0:
 				fragment = new NewsFragment();
+
 				break;
 			case 1:
 				fragment = new SitesFragment();
+
 				break;
 			}
 			return fragment;
