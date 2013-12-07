@@ -1,5 +1,6 @@
 package com.martin.updroid;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,7 +17,8 @@ import android.widget.Spinner;
 
 public class SitesFragment extends Fragment implements OnItemClickListener,
 		OnItemSelectedListener {
-
+	OnProgressChangeListener mCallback;
+	
 	private ListView lvArticles;
 	private Spinner spSources;
 	private NewsSources nSources;
@@ -38,6 +40,19 @@ public class SitesFragment extends Fragment implements OnItemClickListener,
 		nSources = new NewsSources(getActivity());
 		lvArticles.setOnItemClickListener(this);
 	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		// This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            mCallback = (OnProgressChangeListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnProgressChangeListener");
+        }
+	}
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
@@ -50,7 +65,10 @@ public class SitesFragment extends Fragment implements OnItemClickListener,
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View arg1, final int arg2,
 			long arg3) {
-		getActivity().setProgressBarIndeterminateVisibility(true);
+		if (mCallback.changeVisibility()) {
+			getActivity().setProgressBarIndeterminateVisibility(true);
+		}
+		mCallback.actionStarted();
 		new Thread(new Runnable() {
 
 			@Override
@@ -75,7 +93,10 @@ public class SitesFragment extends Fragment implements OnItemClickListener,
 					public void run() {
 						lvArticles.setAdapter(new ArticlesAdapter(getActivity(),
 								nColl));
-						getActivity().setProgressBarIndeterminateVisibility(false);
+						mCallback.actionFinished();
+						if (mCallback.changeVisibility()) {
+							getActivity().setProgressBarIndeterminateVisibility(false);
+						}
 					}
 				});
 			}

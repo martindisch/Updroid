@@ -27,7 +27,7 @@ import android.widget.NumberPicker;
 import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity implements
-		ActionBar.TabListener {
+		ActionBar.TabListener, OnProgressChangeListener {
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -43,12 +43,15 @@ public class MainActivity extends FragmentActivity implements
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	ViewPager mViewPager;
+	private int actionsInProgress;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_main);
+		
+		actionsInProgress = 0;
 
 		// Set up the action bar.
 		final ActionBar actionBar = getActionBar();
@@ -239,5 +242,23 @@ public class MainActivity extends FragmentActivity implements
                 "android:switcher:" + mViewPager.getId() + ":"
                         + fragmentPagerAdapter.getItemId(position));
     }
+
+	@Override
+	public void actionStarted() {
+		actionsInProgress++;
+	}
+
+	@Override
+	public void actionFinished() {
+		actionsInProgress--;
+	}
+
+	@Override
+	public boolean changeVisibility() {
+		if (actionsInProgress > 0) {
+			return false;
+		}
+		return true;
+	}
 
 }

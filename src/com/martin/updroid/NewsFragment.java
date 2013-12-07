@@ -1,5 +1,6 @@
 package com.martin.updroid;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,7 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class NewsFragment extends Fragment implements OnItemClickListener {
-
+	OnProgressChangeListener mCallback;
+	
 	private ListView lvArticles;
 	private NewsSources nSources;
 	private NewsCollection nColl;
@@ -37,9 +39,25 @@ public class NewsFragment extends Fragment implements OnItemClickListener {
 		lvArticles.setOnItemClickListener(this);
 		loadUnread();
 	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		// This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            mCallback = (OnProgressChangeListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnProgressChangeListener");
+        }
+	}
 
 	public void loadUnread() {
-		getActivity().setProgressBarIndeterminateVisibility(true);
+		if (mCallback.changeVisibility()) {
+			getActivity().setProgressBarIndeterminateVisibility(true);
+		}
+		mCallback.actionStarted();
 		new Thread(new Runnable() {
 
 			@Override
@@ -51,7 +69,10 @@ public class NewsFragment extends Fragment implements OnItemClickListener {
 					public void run() {
 						lvArticles.setAdapter(new ArticlesAdapter(getActivity(),
 								nColl));
-						getActivity().setProgressBarIndeterminateVisibility(false);
+						mCallback.actionFinished();
+						if (mCallback.changeVisibility()) {
+							getActivity().setProgressBarIndeterminateVisibility(false);
+						}
 					}
 					
 				});
