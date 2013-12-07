@@ -35,10 +35,8 @@ public class SitesFragment extends Fragment implements OnItemClickListener,
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-
 		nSources = new NewsSources(getActivity());
 		lvArticles.setOnItemClickListener(this);
-
 	}
 
 	@Override

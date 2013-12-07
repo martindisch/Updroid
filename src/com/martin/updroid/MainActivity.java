@@ -191,7 +191,7 @@ public class MainActivity extends FragmentActivity implements
 			np.setMaxValue(9000);
 			np.setValue(spSettings.getInt("interval", 1));
 			dg.setView(np);
-			dg.setMessage("The interval to check for news in the background");
+			dg.setMessage("The interval to check for news in the background.");
 			dg.setNegativeButton("Cancel", null);
 			dg.setPositiveButton("OK", new OnClickListener() {
 
