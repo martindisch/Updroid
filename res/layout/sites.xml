@@ -12,14 +12,20 @@
         <TextView 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Source"/>
+            android:textSize="20sp"
+            android:text="Source:"/>
         <Spinner 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="50dp"
             android:id="@+id/spSources"
             android:entries="@array/dropdown_values"/>
+        
     </LinearLayout>
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#d9d9d9" />
     <ListView
         android:id="@+id/lvArticles"
         android:layout_width="match_parent"

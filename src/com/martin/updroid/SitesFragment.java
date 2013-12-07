@@ -7,12 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 public class SitesFragment extends Fragment implements OnItemClickListener,
 		OnItemSelectedListener {
@@ -50,27 +50,38 @@ public class SitesFragment extends Fragment implements OnItemClickListener,
 	}
 
 	@Override
-	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
+	public void onItemSelected(AdapterView<?> arg0, View arg1, final int arg2,
 			long arg3) {
-		switch (arg2) {
-		case 0:
-			nColl = nSources.getA3_News();
-			lvArticles.setAdapter(new ArticlesAdapter(getActivity(), nColl));
-			break;
-		case 1:
-			nColl = nSources.getA3_Devhub();
-			lvArticles.setAdapter(new ArticlesAdapter(getActivity(), nColl));
-			break;
-		case 2:
-			nColl = nSources.getSpaceEngineers_News();
-			lvArticles.setAdapter(new ArticlesAdapter(getActivity(), nColl));
-			break;
-		case 3:
-			nColl = nSources.getLayer_News();
-			lvArticles.setAdapter(new ArticlesAdapter(getActivity(), nColl));
-			break;
-		}
+		getActivity().setProgressBarIndeterminateVisibility(true);
+		new Thread(new Runnable() {
 
+			@Override
+			public void run() {
+				switch (arg2) {
+				case 0:
+					nColl = nSources.getA3_News();
+					break;
+				case 1:
+					nColl = nSources.getA3_Devhub();
+					break;
+				case 2:
+					nColl = nSources.getSpaceEngineers_News();
+					break;
+				case 3:
+					nColl = nSources.getLayer_News();
+					break;
+				}
+				lvArticles.post(new Runnable() {
+
+					@Override
+					public void run() {
+						lvArticles.setAdapter(new ArticlesAdapter(getActivity(),
+								nColl));
+						getActivity().setProgressBarIndeterminateVisibility(false);
+					}
+				});
+			}
+		}).start();
 	}
 
 	@Override

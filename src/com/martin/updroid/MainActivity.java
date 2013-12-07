@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
+import android.view.Window;
 
 public class MainActivity extends FragmentActivity implements
 		ActionBar.TabListener {
@@ -34,6 +35,7 @@ public class MainActivity extends FragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_main);
 
 		// Set up the action bar.
@@ -69,14 +71,6 @@ public class MainActivity extends FragmentActivity implements
 			actionBar.addTab(actionBar.newTab()
 					.setText(mSectionsPagerAdapter.getPageTitle(i))
 					.setTabListener(this));
-		}
-		// Enable networking without secondary thread
-		// Usually very bad style, but for smaller tasks it doesn't matter that
-		// much
-		if (android.os.Build.VERSION.SDK_INT > 9) {
-			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-					.permitAll().build();
-			StrictMode.setThreadPolicy(policy);
 		}
 	}
 
@@ -127,11 +121,9 @@ public class MainActivity extends FragmentActivity implements
 			switch (position) {
 			case 0:
 				fragment = new NewsFragment();
-
 				break;
 			case 1:
 				fragment = new SitesFragment();
-
 				break;
 			}
 			return fragment;
