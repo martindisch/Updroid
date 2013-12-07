@@ -85,5 +85,5 @@ public class SitesFragment extends Fragment implements OnItemClickListener,
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
 	}
-
+	
 }

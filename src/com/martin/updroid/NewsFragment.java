@@ -7,12 +7,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class NewsFragment extends Fragment implements OnItemClickListener {
 
@@ -36,7 +38,7 @@ public class NewsFragment extends Fragment implements OnItemClickListener {
 		loadUnread();
 	}
 
-	private void loadUnread() {
+	public void loadUnread() {
 		getActivity().setProgressBarIndeterminateVisibility(true);
 		new Thread(new Runnable() {
 
@@ -70,4 +72,5 @@ public class NewsFragment extends Fragment implements OnItemClickListener {
 		editor.commit();
 		loadUnread();
 	}
+	
 }

@@ -253,5 +253,21 @@ public class NewsSources {
 		
 		return new NewsCollection(unreadTitles, unreadUrls, unreadContents);
 	}
+	
+	public void setAllRead() {
+		setSingleRead(getA3_News());
+		setSingleRead(getA3_Devhub());
+		setSingleRead(getSpaceEngineers_News());
+		setSingleRead(getLayer_News());
+	}
+	
+	private void setSingleRead(NewsCollection nColl) {
+		SharedPreferences spLibrary = context.getSharedPreferences("Library", Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = spLibrary.edit();
+		for (int i = 0; i < nColl.getTitles().length; i++) {
+			editor.putBoolean(nColl.getTitles()[i], true);
+		}
+		editor.commit();
+	}
 
 }

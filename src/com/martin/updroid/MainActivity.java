@@ -24,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.NumberPicker;
+import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity implements
 		ActionBar.TabListener {
@@ -206,8 +207,37 @@ public class MainActivity extends FragmentActivity implements
 			});
 			dg.show();
 			break;
+		case R.id.readAll:
+			final NewsSources nSources = new NewsSources(this);
+			setProgressBarIndeterminateVisibility(true);
+			new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					nSources.setAllRead();
+					runOnUiThread(new Runnable() {
+
+						@Override
+						public void run() {
+							setProgressBarIndeterminateVisibility(false);
+							NewsFragment fragment = (NewsFragment) findFragmentByPosition(0);
+	                        fragment.loadUnread();
+						}
+						
+					});
+				}
+				
+			}).start();
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	public Fragment findFragmentByPosition(int position) {
+        SectionsPagerAdapter fragmentPagerAdapter = mSectionsPagerAdapter;
+        return getSupportFragmentManager().findFragmentByTag(
+                "android:switcher:" + mViewPager.getId() + ":"
+                        + fragmentPagerAdapter.getItemId(position));
+    }
 
 }
