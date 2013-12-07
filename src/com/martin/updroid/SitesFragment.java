@@ -1,7 +1,5 @@
 package com.martin.updroid;
 
-import android.app.ActionBar;
-import android.app.ActionBar.OnNavigationListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,12 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
-public class SitesFragment extends Fragment implements OnItemClickListener, OnNavigationListener {
+public class SitesFragment extends Fragment implements OnItemClickListener,
+		OnItemSelectedListener {
 
 	private ListView lvArticles;
+	private Spinner spSources;
 	private NewsSources nSources;
 	private NewsCollection nColl;
 
@@ -25,18 +27,18 @@ public class SitesFragment extends Fragment implements OnItemClickListener, OnNa
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.sites, container, false);
 		lvArticles = (ListView) view.findViewById(R.id.lvArticles);
+		spSources = (Spinner) view.findViewById(R.id.spSources);
+		spSources.setOnItemSelectedListener(this);
 		return view;
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		
-		nSources = new NewsSources(getActivity());
-		nColl = nSources.getA3_News();
 
-		lvArticles.setAdapter(new ArticlesAdapter(getActivity(), nColl));
+		nSources = new NewsSources(getActivity());
 		lvArticles.setOnItemClickListener(this);
+
 	}
 
 	@Override
@@ -47,28 +49,32 @@ public class SitesFragment extends Fragment implements OnItemClickListener, OnNa
 		startActivity(i);
 	}
 
-	public void showSelection() {
-		final ActionBar actionBar = getActivity().getActionBar();
-		
-		actionBar.setDisplayShowTitleEnabled(false);
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-
-		final String[] dropdownValues = getResources().getStringArray(
-				R.array.dropdown_values);
-
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				actionBar.getThemedContext(),
-				android.R.layout.simple_spinner_item, android.R.id.text1,
-				dropdownValues);
-
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-		actionBar.setListNavigationCallbacks(adapter, this);
-	}
 	@Override
-	public boolean onNavigationItemSelected(int arg0, long arg1) {
-		// TODO Load ListView depending on selection
-		return true;
+	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
+			long arg3) {
+		switch (arg2) {
+		case 0:
+			nColl = nSources.getA3_News();
+			lvArticles.setAdapter(new ArticlesAdapter(getActivity(), nColl));
+			break;
+		case 1:
+			nColl = nSources.getA3_Devhub();
+			lvArticles.setAdapter(new ArticlesAdapter(getActivity(), nColl));
+			break;
+		case 2:
+			nColl = nSources.getSpaceEngineers_News();
+			lvArticles.setAdapter(new ArticlesAdapter(getActivity(), nColl));
+			break;
+		case 3:
+			nColl = nSources.getLayer_News();
+			lvArticles.setAdapter(new ArticlesAdapter(getActivity(), nColl));
+			break;
+		}
+
 	}
-	
+
+	@Override
+	public void onNothingSelected(AdapterView<?> arg0) {
+	}
+
 }
