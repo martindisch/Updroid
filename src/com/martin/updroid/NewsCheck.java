@@ -1,15 +1,15 @@
 package com.martin.updroid;
 
-import android.app.AlarmManager;
+import java.util.Random;
+
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.text.format.DateUtils;
-import android.text.format.Time;
-import android.util.Log;
-import android.widget.Toast;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 
 public class NewsCheck extends IntentService {
 
@@ -19,13 +19,27 @@ public class NewsCheck extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		Log.e("FFF", "Download started");
-		NewsSources nSources = new NewsSources(getApplicationContext());
-		NewsCollection nA3N = nSources.getA3_News();
-		NewsCollection nA3D = nSources.getA3_Devhub();
-		NewsCollection nSEN = nSources.getSpaceEngineers_News();
-		NewsCollection nLN = nSources.getLayer_News();
-		Log.e("FFF", "Download finished");
+		NewsSources nSources = new NewsSources(this);
+		NewsCollection nColl = nSources.getAllUnread();
+		
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+		mBuilder.setAutoCancel(true);
+		mBuilder.setContentTitle("New articles");
+		mBuilder.setContentText(nColl.getTitles().length + " unread articles");
+		mBuilder.setSmallIcon(R.drawable.ic_action_view_as_list);
+		mBuilder.setDefaults(Notification.DEFAULT_ALL);
+		
+		Intent resultIntent = new Intent(NewsCheck.this, MainActivity.class);
+		
+		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+		stackBuilder.addParentStack(MainActivity.class);
+		stackBuilder.addNextIntent(resultIntent);
+		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+		
+		mBuilder.setContentIntent(resultPendingIntent);
+		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		
+		mNotificationManager.notify(new Random().nextInt(999999999), mBuilder.build());
 	}
 
 }

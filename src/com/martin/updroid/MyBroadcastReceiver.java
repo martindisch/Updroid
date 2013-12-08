@@ -21,14 +21,14 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 				intent1, PendingIntent.FLAG_UPDATE_CURRENT);
 		long currentTimeMillis = System.currentTimeMillis();
 		long nextUpdateTimeMillis = currentTimeMillis
-				+ spSettings.getInt("interval", 1) * DateUtils.MINUTE_IN_MILLIS;
+				+ spSettings.getInt("interval", 240) * DateUtils.MINUTE_IN_MILLIS;
 		Time nextUpdateTime = new Time();
 		nextUpdateTime.set(nextUpdateTimeMillis);
 
 		AlarmManager alarmManager = (AlarmManager) context
 				.getSystemService(Context.ALARM_SERVICE);
 		alarmManager.setInexactRepeating(AlarmManager.RTC,
-				nextUpdateTimeMillis, spSettings.getInt("interval", 1)
+				nextUpdateTimeMillis, spSettings.getInt("interval", 240)
 						* DateUtils.MINUTE_IN_MILLIS, pendingIntent);
 	}
 

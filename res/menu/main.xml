@@ -4,7 +4,7 @@
         android:id="@+id/readAll"
         android:orderInCategory="1"
         android:showAsAction="never"
-        android:title="Read all"/>
+        android:title="Mark all as read"/>
     <item
         android:id="@+id/interval"
         android:orderInCategory="2"
