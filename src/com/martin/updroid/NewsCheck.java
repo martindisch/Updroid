@@ -26,9 +26,12 @@ public class NewsCheck extends IntentService {
 			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
 					this);
 			mBuilder.setAutoCancel(true);
-			mBuilder.setContentTitle("New articles");
-			mBuilder.setContentText(nColl.getTitles().length
-					+ " unread articles");
+			mBuilder.setContentTitle(nColl.getTitles().length + " new articles");
+			String news = "";
+			for (int i = 0; i < nColl.getTitles().length; i++) {
+				news += nColl.getTitles()[i] + "\n";
+			}
+			mBuilder.setContentText(news);
 			mBuilder.setSmallIcon(R.drawable.ic_action_view_as_list);
 			mBuilder.setDefaults(Notification.DEFAULT_ALL);
 
