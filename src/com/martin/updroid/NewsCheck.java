@@ -37,31 +37,34 @@ public class NewsCheck extends IntentService {
 				}
 			}
 			
-			mBuilder.setContentTitle(counter + " new articles");
-			String news = "";
-			for (int i = 0; i < counter; i++) {
-				news += filtered[i] + "\n";
+			if (counter > 0) {
+				mBuilder.setContentTitle(counter + " new articles");
+				String news = "";
+				for (int i = 0; i < counter; i++) {
+					news += filtered[i] + "\n";
+				}
+				mBuilder.setContentText(news);
+				mBuilder.setSmallIcon(R.drawable.ic_action_view_as_list);
+				mBuilder.setDefaults(Notification.DEFAULT_ALL);
+				// Make it big
+				mBuilder.setStyle(new NotificationCompat.BigTextStyle()
+	            .bigText(news));
+
+				Intent resultIntent = new Intent(NewsCheck.this, MainActivity.class);
+
+				TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+				stackBuilder.addParentStack(MainActivity.class);
+				stackBuilder.addNextIntent(resultIntent);
+				PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
+						0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+				mBuilder.setContentIntent(resultPendingIntent);
+				NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+				mNotificationManager.notify(new Random().nextInt(999999999),
+						mBuilder.build());
 			}
-			mBuilder.setContentText(news);
-			mBuilder.setSmallIcon(R.drawable.ic_action_view_as_list);
-			mBuilder.setDefaults(Notification.DEFAULT_ALL);
-			// Make it big
-			mBuilder.setStyle(new NotificationCompat.BigTextStyle()
-            .bigText(news));
-
-			Intent resultIntent = new Intent(NewsCheck.this, MainActivity.class);
-
-			TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-			stackBuilder.addParentStack(MainActivity.class);
-			stackBuilder.addNextIntent(resultIntent);
-			PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
-					0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-			mBuilder.setContentIntent(resultPendingIntent);
-			NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-			mNotificationManager.notify(new Random().nextInt(999999999),
-					mBuilder.build());
+			
 		}
 
 	}
