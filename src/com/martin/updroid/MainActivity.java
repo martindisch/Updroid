@@ -1,14 +1,11 @@
 package com.martin.updroid;
 
 import java.util.Locale;
-import java.util.Random;
 
 import android.app.ActionBar;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,8 +17,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewPager;
 import android.text.format.DateUtils;
 import android.text.format.Time;

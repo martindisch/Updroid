@@ -9,14 +9,12 @@ import android.widget.TextView;
 
 public class ArticlesAdapter extends BaseAdapter {
 
-	private Context context;
 	private NewsCollection nColl;
 	private TextView tvTitle, tvContent;
 	private static LayoutInflater inflater;
 
 	public ArticlesAdapter(Context context, NewsCollection nColl) {
 		super();
-		this.context = context;
 		this.nColl = nColl;
 		inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
