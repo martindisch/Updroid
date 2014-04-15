@@ -21,7 +21,7 @@ public class NewsCheck extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		NewsSources nSources = new NewsSources(this);
-		NewsCollection nColl = nSources.getAllUnread();
+		NewsCollection nColl = nSources.getAllUnnotified();
 
 		if (!(nColl.getTitles().length == 0)) {
 			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
