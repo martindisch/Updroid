@@ -47,10 +47,11 @@ public class NewsCheck extends IntentService {
 				mBuilder.setContentText(news);
 				mBuilder.setSmallIcon(R.drawable.ic_action_view_as_list);
 				mBuilder.setDefaults(Notification.DEFAULT_ALL);
-				// Make it big
-				mBuilder.setStyle(new NotificationCompat.BigTextStyle()
-	            .bigText(news));
-
+				// Make it big if necessary
+				if (counter > 1) {
+					mBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(news));
+				}
+				
 				Intent resultIntent = new Intent(NewsCheck.this, MainActivity.class);
 
 				TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
